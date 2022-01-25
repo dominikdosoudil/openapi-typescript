@@ -78,12 +78,12 @@ async function openapiTS(
   const rootTypes = transformAll(rootSchema, { ...ctx });
   for (const k of Object.keys(rootTypes)) {
     if (typeof rootTypes[k] === "string") {
-      output += `export interface ${k} {\n  ${rootTypes[k]}\n}\n\n`;
+      output += `export ${options.exportType === true ? "type" : "interface"} ${k}${options.exportType === true ? ' =' : ''} {\n  ${rootTypes[k]}\n}\n\n`;
     }
   }
 
   // 2b. external schemas (subschemas)
-  output += `export interface external {\n`;
+  output += `export ${options.exportType === true ? "type" : "interface"} external${options.exportType === true ? ' =' : ''} {\n`;
   const externalKeys = Object.keys(external);
   externalKeys.sort((a, b) => a.localeCompare(b, "en", { numeric: true })); // sort external keys because they may have resolved in a different order each time
   for (const subschemaURL of externalKeys) {
